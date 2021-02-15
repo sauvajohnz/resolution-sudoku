@@ -12,24 +12,53 @@ import os
 [0, 0, 0, 0, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 0, 0, 0, 0, 0],
 [0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+exemple de grid resolvable
+[0, 1, 0, 0, 2, 0, 0, 4, 0],
+[9, 2, 4, 0, 3, 1, 0, 0, 0],
+[0, 7, 6, 9, 0, 0, 2, 0, 0],
+[1, 5, 0, 3, 4, 0, 0, 0, 6],
+[0, 4, 0, 0, 6, 0, 0, 5, 0],
+[6, 0, 0, 0, 7, 9, 0, 1, 4],
+[0, 0, 5, 0, 0, 6, 9, 2, 0],
+[0, 0, 0, 2, 9, 0, 4, 7, 8],
+[0, 9, 0, 0, 8, 0, 0, 6, 0],
 """
 
 
-####A FAIRE#### pouvoir attribuer une serie de nombre a une grille
+#On demande d'abord à l'utilisateur sa grid, et on vérifie qu'elle est correcte
+#exemple de grid: 010020040924031000076900200150340006040060050600079014005006920000290478090080060
+input_sudoku = "0"
+while len(input_sudoku) != 81:
+    try:
+        input_sudoku = input("Code sudoku (il doit faire 81 caractère): \nExemple: 010020040924031000076900200150340006040060050600079014005006920000290478090080060\n>")
+        if len(input_sudoku) != 81:
+            print("La grille n'est pas valable, recommencez")
+            input_sudoku = "0"
+    except ValueError:
+        print("Il y a eu une erreur dans la valeur de cette grid")
+        input_sudoku = "0"
+
 
 #pour la grille du sudoku, on fait 9 tableau qui sont les lignes, dans un tableau qui est la grille totale
 grid_sudoku = [
-    [0, 1, 0, 0, 2, 0, 0, 4, 0],
-    [9, 2, 4, 0, 3, 1, 0, 0, 0],
-    [0, 7, 6, 9, 0, 0, 2, 0, 0],
-    [1, 5, 0, 3, 4, 0, 0, 0, 6],
-    [0, 4, 0, 0, 6, 0, 0, 5, 0],
-    [6, 0, 0, 0, 7, 9, 0, 1, 4],
-    [0, 0, 5, 0, 0, 6, 9, 2, 0],
-    [0, 0, 0, 2, 9, 0, 4, 7, 8],
-    [0, 9, 0, 0, 8, 0, 0, 6, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 
+#on attribue la grid que l'utilisateur à entré à la grid du programme
+ii = 0
+for i in range(0,9):
+    for y in range(0,9):
+        grid_sudoku[i][y] = int(input_sudoku[ii])
+        ii += 1
 
 #la fonction scan determine la possibilitées de nombre qu'une case peut avoir, s'il n'y en a qu'une seule, elle est remplacée par ce nombre
 def scan_case(ligne, case):
@@ -93,7 +122,8 @@ def scan_case(ligne, case):
     if len(possibilitees) == 1:
         grid_sudoku[ligne][case] = possibilitees[0]
     elif len(possibilitees) == 0:
-        print("erreur dimension tableau des possibilitees")
+        print("Cette grid n'est pas valable, elle dispose de valeurs erronees")
+        os.system("EXIT")
 
 
 def resolve_sudoku():
@@ -109,16 +139,18 @@ def resolve_sudoku():
                     scan_case(i, y)
 
 
-#on affiche la grid finale
+#on affiche la grid
 def afficher_grid():
     for i in range(0,9):
         for y in range(0,9):
             print(grid_sudoku[i][y], end=" ")
         print("")
 
-
-
+print("Votre grille:")
+afficher_grid() # on affiche la grille avant qu'elle soit résolue
+print("\nGrille résolue :")
 #on lance le programme de résolution
 resolve_sudoku() # on resout la grille avec les scan
 afficher_grid() # on affiche la grille finale
-os.system("PAUSE") # on met en pause le programme pour pas qu'il s'éteigne
+
+os.system("PAUSE") #permet de faire une pause pour ne pas quitter la fenetre
